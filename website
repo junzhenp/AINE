@@ -1,0 +1,1438 @@
+import React, { useState } from 'react';
+import { 
+  Briefcase, 
+  Search, 
+  Bot, 
+  Building2, 
+  Users, 
+  ChevronRight, 
+  CheckCircle2, 
+  AlertCircle,
+  LayoutDashboard,
+  BrainCircuit,
+  FileText,
+  Sparkles,
+  ShieldCheck,
+  GraduationCap,
+  Compass,
+  ArrowRight,
+  RotateCcw,
+  UserCheck,
+  MessageSquare,
+  Inbox,
+  Lock,
+  Clock,
+  Upload,
+  Link2,
+  FileCode,
+  Check,
+  LogOut,
+  LogIn
+} from 'lucide-react';
+
+// --- MASCOT ENCOURAGING QUOTES (Encouraging, inspiring, and clean) ---
+const MASCOT_QUOTES = [
+  "Believe in yourself! Every journey of a thousand miles begins with a single step! ⭐",
+  "Your unique voice, fresh ideas, and background are your greatest strengths! 🌈",
+  "Stay curious! Asking questions and learning new things is the true key to growth! 📚",
+  "Integrity, empathy, and professional values make you a champion. Keep shining! 💖",
+  "Challenges are just hidden lessons helping you build strength and resilience! 🌱",
+  "You possess incredible potential! Let's build a fantastic workspace together! 🚀",
+  "A positive mind uncovers creative paths in every unpredictable scenario! ☀️"
+];
+
+// --- JOB ROLES DATA WITH COMPREHENSIVE SUMMARIES ---
+const JOBS = [
+  {
+    id: 'j1',
+    title: 'Senior Frontend Engineer',
+    department: 'Engineering',
+    location: 'Remote',
+    description: 'Lead the development of our core web applications, building accessible, performant, and high-quality user experiences.',
+    basicRequirements: 'Strong fundamental knowledge of web structures, modern frameworks, responsive layouts, and accessible design principles.',
+    keywords: ['react', 'javascript', 'typescript', 'frontend', 'css', 'html', 'architecture', 'ui', 'ux', 'web', 'performance'],
+    internKeywords: ['react', 'javascript', 'html', 'css', 'git', 'learning', 'curiosity']
+  },
+  {
+    id: 'j2',
+    title: 'Talent Acquisition Specialist',
+    department: 'HR & Talent',
+    location: 'Chicago, IL (Hybrid)',
+    description: 'Champion our inclusive hiring initiatives, source top-tier diverse talent, and deliver an outstanding, supportive candidate experience.',
+    basicRequirements: 'Exceptional networking and communication abilities, appreciation for diversity, and supportive candidate care.',
+    keywords: ['recruiting', 'sourcing', 'interviewing', 'candidate experience', 'employer branding', 'ats', 'inclusion', 'communication'],
+    internKeywords: ['communication', 'organization', 'networking', 'social media', 'eagerness', 'teamwork']
+  },
+  {
+    id: 'j3',
+    title: 'HR Business Partner (HRBP)',
+    department: 'HR & Talent',
+    location: 'New York, NY (Hybrid)',
+    description: 'Work closely with team leaders to align people strategies with business objectives, resolve conflicts, and cultivate safe workplace environments.',
+    basicRequirements: 'Deep empathy, active listening, strategic workplace communication, and strong relationship-building capabilities.',
+    keywords: ['strategic partnering', 'employee relations', 'coaching', 'talent management', 'organizational design', 'leadership', 'succession planning'],
+    internKeywords: ['empathy', 'problem solving', 'active listening', 'business basics', 'collaboration']
+  },
+  {
+    id: 'j4',
+    title: 'Compensation & Benefits Specialist',
+    department: 'HR & Talent',
+    location: 'Remote',
+    description: 'Design, analyze, and implement fair global compensation models and wellness benefit packages that support our diverse workforce.',
+    basicRequirements: 'Strong numerical/analytical skills, attention to detail, and a commitment to pay equity and employee welfare.',
+    keywords: ['compensation', 'benefits', 'payroll', 'benchmarking', 'analytics', 'excel', 'data analysis', 'rewards', 'compliance'],
+    internKeywords: ['analytics', 'excel', 'math', 'attention to detail', 'research']
+  },
+  {
+    id: 'j5',
+    title: 'Learning & Development Coordinator',
+    department: 'HR & Talent',
+    location: 'Austin, TX (Hybrid)',
+    description: 'Create and deliver career development pathways, skills upskilling courses, and inclusive team workshops.',
+    basicRequirements: 'Passion for education, experience organizing sessions, public presentation confidence, and creative program design.',
+    keywords: ['training', 'instructional design', 'e-learning', 'facilitation', 'upskilling', 'onboarding', 'curriculum', 'coaching'],
+    internKeywords: ['presentation', 'creativity', 'public speaking', 'organization', 'writing']
+  },
+  {
+    id: 'j6',
+    title: 'HR Operations Analyst',
+    department: 'HR & Talent',
+    location: 'Remote',
+    description: 'Streamline HR tech systems, manage employee onboarding databases, and keep our HR files smooth, secure, and legally compliant.',
+    basicRequirements: 'Tech-savvy attitude, high standard of organizational design, and respect for data security protocols.',
+    keywords: ['hris', 'data privacy', 'onboarding system', 'compliance', 'workflows', 'process improvement', 'reporting', 'database'],
+    internKeywords: ['database', 'process planning', 'organization', 'documentation', 'tech savvy']
+  }
+];
+
+// --- INITIAL APPLICATIONS SIMULATED DATABASE ---
+const INITIAL_APPLICATIONS = [
+  {
+    id: 'a1',
+    jobId: 'j2',
+    name: 'Marcus Vance',
+    email: 'marcus@example.com',
+    type: 'Full-time',
+    fileName: 'Marcus_Vance_Resume.pdf',
+    portfolioUrl: 'https://linkedin.com/in/marcus-demo',
+    aiScore: 91,
+    recruiterScore: 95,
+    recruiterFeedback: 'Outstanding professional focus! Their inclusive communication techniques are top-tier. Fully approved for the final interview rounds.',
+    aiSummary: 'Excellent match. Applicant demonstrates advanced experience in modern sourcing channels, ATS platforms, and has built specialized diversity pipelines.',
+    status: 'Interview Scheduled',
+    date: '2026-05-21'
+  },
+  {
+    id: 'a2',
+    jobId: 'j4',
+    name: 'Sophia Patel',
+    email: 'sophia@example.com',
+    type: 'Internship',
+    fileName: 'Sophia_Academic_CV.pdf',
+    portfolioUrl: 'https://github.com/sophia-codes',
+    aiScore: 85,
+    recruiterScore: 92,
+    recruiterFeedback: 'Sophia shows great analytical potential! Her school projects demonstrate an excellent grip on Excel and structured reasoning. Ready for our L&D internship pathway.',
+    aiSummary: 'Strong Intern potential. Demonstrates exceptional foundational Excel, data research skills, and standard benchmarking knowledge. Eager to learn.',
+    status: 'Shortlisted',
+    date: '2026-05-22'
+  }
+];
+
+// --- 4-STEP CAREER COMPASS QUIZ SCENARIOS ---
+const COMPASS_QUESTIONS = [
+  {
+    id: 1,
+    text: "What kind of projects get you most excited?",
+    options: [
+      { text: "Designing beautiful websites or coding interactive tools", roleId: "j1" },
+      { text: "Meeting new people and hearing their unique stories", roleId: "j2" },
+      { text: "Helping friends solve conflicts or giving great team advice", roleId: "j3" },
+      { text: "Analyzing puzzles, patterns, and working with spreadsheets", roleId: "j4" },
+      { text: "Teaching others, giving presentations, or designing fun learning games", roleId: "j5" },
+      { text: "Organizing plans, files, and making sure everything runs smoothly", roleId: "j6" }
+    ]
+  },
+  {
+    id: 2,
+    text: "Which of your superpowers do you use most often?",
+    options: [
+      { text: "Technical building and pixel-perfect creativity", roleId: "j1" },
+      { text: "Networking, persuasion, and making people feel welcome", roleId: "j2" },
+      { text: "Empathy, deep listening, and strategic consulting", roleId: "j3" },
+      { text: "Logical reasoning, math, and attention to detail", roleId: "j4" },
+      { text: "Inspiring others, creating lessons, and public speaking", roleId: "j5" },
+      { text: "Systematic organization, databases, and troubleshooting", roleId: "j6" }
+    ]
+  },
+  {
+    id: 3,
+    text: "HR environments can be unpredictable. How do you organize your day when a sudden, urgent employee issue disrupts your planned schedule?",
+    options: [
+      { text: "I instantly pause, stay calm, and focus on supporting the individual through empathy and careful communication.", roleId: "j3" },
+      { text: "I immediately document the event, follow security/privacy steps, and update database systems to maintain compliance.", roleId: "j6" },
+      { text: "I quickly triage, restructure my tasks based on priority numbers, and analyze impact using a structured checklist.", roleId: "j4" },
+      { text: "I reschedule my recruiting interviews dynamically and assure stakeholders everything is managed with high candidate care.", roleId: "j2" },
+      { text: "I view it as a great learning/coaching moment to help build training guidelines or future preventative workshops.", roleId: "j5" },
+      { text: "I check the system dashboard to make sure frontend platform notifications or error monitors remain perfectly stable.", roleId: "j1" }
+    ]
+  },
+  {
+    id: 4,
+    text: "In HR, you will frequently handle highly confidential or sensitive employee information. How do you ensure this data remains secure, and what would you do if a colleague casually asked you to share confidential details?",
+    options: [
+      { text: "I firmly but politely tell them I cannot share it, establishing strict data privacy boundaries immediately.", roleId: "j6" },
+      { text: "I remind them of security compliance policies and pay-benchmarking protocols in a supportive way.", roleId: "j4" },
+      { text: "I use it as an opportunity to educate them gently about our privacy training and standard ethical guidelines.", roleId: "j5" },
+      { text: "I protect the data systematically by following proper data vaults and secure web security protocols.", roleId: "j1" },
+      { text: "I manage the conversation with absolute discretion, ensuring a safe psychological environment for all parties.", roleId: "j3" },
+      { text: "I protect the privacy of the applicant or hire and direct them politely to our public talent sourcing pathways.", roleId: "j2" }
+    ]
+  }
+];
+
+export default function App() {
+  const [currentView, setCurrentView] = useState('home'); // home, jobs, apply, dashboard, inbox
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [applications, setApplications] = useState(INITIAL_APPLICATIONS);
+  
+  // Mascot Interactive Quote state
+  const [mascotBubble, setMascotBubble] = useState("Hi there! Click on me for an encouraging quote to power up your day! 🚀");
+
+  // Career Compass State
+  const [compassStep, setCompassStep] = useState(0); // 0 = intro, 1-4 = Qs, 5 = results
+  const [compassScores, setCompassScores] = useState({}); // roleId -> score tally
+
+  // Personal Candidate Portal Login state
+  const [activeCandidateEmail, setActiveCandidateEmail] = useState('');
+  const [candidateLoginInput, setCandidateLoginInput] = useState('');
+  const [loginFeedback, setLoginFeedback] = useState('');
+
+  // Navigation Helper
+  const navigate = (view, job = null) => {
+    setCurrentView(view);
+    if (job) setSelectedJob(job);
+    window.scrollTo(0, 0);
+  };
+
+  // Recruiter Portal State Updates
+  const handleRecruiterUpdate = (id, field, value) => {
+    setApplications(prev => prev.map(app => {
+      if (app.id === id) {
+        return { ...app, [field]: value };
+      }
+      return app;
+    }));
+  };
+
+  // Mascot click handler to generate fresh, positive, and safe quotes
+  const handleMascotClick = () => {
+    const randomIndex = Math.floor(Math.random() * MASCOT_QUOTES.length);
+    setMascotBubble(MASCOT_QUOTES[randomIndex]);
+  };
+
+  // Candidate Quick Account Login
+  const handleCandidateLogin = (e) => {
+    e.preventDefault();
+    const cleanEmail = candidateLoginInput.trim().toLowerCase();
+    if (!cleanEmail) return;
+
+    // Check if candidate exists in our state
+    const matches = applications.filter(app => app.email.toLowerCase() === cleanEmail);
+    if (matches.length > 0) {
+      setActiveCandidateEmail(cleanEmail);
+      setLoginFeedback('');
+      navigate('inbox');
+    } else {
+      setLoginFeedback("Email not registered yet. Apply to any job to create your tracking dashboard!");
+      // Briefly show alert style notice
+      setTimeout(() => setLoginFeedback(''), 5000);
+    }
+  };
+
+  const handleLogoutCandidate = () => {
+    setActiveCandidateEmail('');
+    setCandidateLoginInput('');
+    setLoginFeedback('');
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col">
+      {/* Navigation Bar (Clean Purple and White Theme) */}
+      <nav className="bg-white border-b border-purple-100 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            {/* Logo */}
+            <div 
+              className="flex items-center cursor-pointer group"
+              onClick={() => { navigate('home'); setCompassStep(0); }}
+            >
+              <div className="bg-purple-600 p-2 rounded-lg group-hover:bg-purple-700 transition-colors">
+                <Building2 className="h-6 w-6 text-white" />
+              </div>
+              <span className="ml-3 text-xl font-bold tracking-tight text-slate-800 group-hover:text-purple-600 transition-colors">
+                Nexus<span className="text-purple-600">HR</span>
+              </span>
+            </div>
+            
+            {/* Nav Menu */}
+            <div className="hidden lg:flex space-x-6 items-center">
+              <button 
+                onClick={() => navigate('jobs')}
+                className={`text-sm font-semibold transition-colors ${currentView === 'jobs' || currentView === 'apply' ? 'text-purple-600' : 'text-slate-600 hover:text-slate-900'}`}
+              >
+                Careers &amp; Roles
+              </button>
+              
+              <button 
+                onClick={() => navigate('inbox')}
+                className={`text-sm font-semibold flex items-center gap-1.5 transition-colors ${currentView === 'inbox' ? 'text-purple-600' : 'text-slate-600 hover:text-slate-900'}`}
+              >
+                <Inbox className="w-4 h-4" />
+                Candidate Portal
+              </button>
+
+              <button 
+                onClick={() => { navigate('home'); setCompassStep(0); }} 
+                className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+              >
+                Meet Nexy
+              </button>
+              
+              <div className="h-6 w-px bg-slate-200"></div>
+
+              {/* TOP RIGHT LOGIN BAR */}
+              <div className="flex items-center bg-purple-50/50 px-3 py-1.5 rounded-xl border border-purple-100">
+                {activeCandidateEmail ? (
+                  <div className="flex items-center space-x-2 text-xs font-semibold text-purple-700">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="truncate max-w-[140px]" title={activeCandidateEmail}>
+                      {activeCandidateEmail}
+                    </span>
+                    <button 
+                      onClick={handleLogoutCandidate} 
+                      className="hover:text-red-600 transition-colors ml-1 p-1"
+                      title="Log Out"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleCandidateLogin} className="flex items-center space-x-2">
+                    <div className="relative">
+                      <input 
+                        type="email" 
+                        required
+                        value={candidateLoginInput}
+                        onChange={(e) => setCandidateLoginInput(e.target.value)}
+                        placeholder="Candidate Email"
+                        className="w-40 xl:w-48 pl-2 pr-2 py-1 rounded-md border border-purple-200 text-xs focus:ring-1 focus:ring-purple-600 focus:border-purple-600 outline-none bg-white"
+                      />
+                    </div>
+                    <button 
+                      type="submit" 
+                      className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-3 py-1 rounded-md transition-all flex items-center gap-1 shrink-0"
+                    >
+                      <LogIn className="w-3 h-3" />
+                      Sign In
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {loginFeedback && (
+                <div className="absolute top-14 right-20 text-[10px] text-amber-700 bg-amber-50 px-3 py-1.5 rounded border border-amber-100 shadow-sm animate-bounce z-50">
+                  {loginFeedback}
+                </div>
+              )}
+              
+              <button 
+                onClick={() => navigate('dashboard')}
+                className="flex items-center space-x-2 bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-800 transition-colors shadow-sm shadow-purple-200"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                <span>Recruiter Portal</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        {currentView === 'home' && (
+          <HomeView 
+            onNavigate={navigate} 
+            compassStep={compassStep}
+            setCompassStep={setCompassStep}
+            compassScores={compassScores}
+            setCompassScores={setCompassScores}
+            mascotBubble={mascotBubble}
+            onMascotClick={handleMascotClick}
+            candidateLoginInput={candidateLoginInput}
+            setCandidateLoginInput={setCandidateLoginInput}
+            onCandidateLogin={handleCandidateLogin}
+            loginFeedback={loginFeedback}
+            activeCandidateEmail={activeCandidateEmail}
+            onLogout={handleLogoutCandidate}
+          />
+        )}
+        {currentView === 'jobs' && <JobsView onNavigate={navigate} />}
+        {currentView === 'apply' && <ApplyView job={selectedJob} onNavigate={navigate} applications={applications} setApplications={setApplications} activeCandidateEmail={activeCandidateEmail} setActiveCandidateEmail={setActiveCandidateEmail} />}
+        {currentView === 'dashboard' && (
+          <DashboardView 
+            applications={applications} 
+            jobs={JOBS} 
+            onUpdate={handleRecruiterUpdate}
+          />
+        )}
+        {currentView === 'inbox' && (
+          <CandidateInboxView 
+            activeCandidateEmail={activeCandidateEmail}
+            candidateLoginInput={candidateLoginInput}
+            setCandidateLoginInput={setCandidateLoginInput}
+            onLogin={handleCandidateLogin}
+            loginFeedback={loginFeedback}
+            applications={applications}
+            jobs={JOBS}
+            onLogout={handleLogoutCandidate}
+            onNavigate={navigate}
+          />
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-950 text-slate-400 py-12 mt-auto border-t border-purple-950/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+          <div className="flex items-center mb-4 md:mb-0">
+            <Building2 className="h-6 w-6 text-purple-500 mr-2" />
+            <span className="text-xl font-bold text-white">NexusHR</span>
+          </div>
+          <div className="flex space-x-6 text-sm">
+            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-white transition-colors">AI Ethics Statement</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+// --- MASCOT COMPONENT ---
+function NexyMascot({ speechBubbleText, onClick }) {
+  return (
+    <div 
+      onClick={onClick}
+      className="flex flex-col items-center justify-center p-6 bg-purple-50/70 rounded-2xl border border-purple-100 hover:border-purple-200 transition-all cursor-pointer shadow-sm hover:shadow-md relative group select-none animate-[fade-in_0.5s_ease-out]"
+    >
+      <div className="absolute top-2 right-3 text-[10px] font-bold text-purple-500 bg-purple-100 px-2 py-0.5 rounded-full animate-pulse">
+        Tap Nexy!
+      </div>
+      
+      {/* Nexy Speech Bubble */}
+      <div className="relative mb-6 bg-white border border-purple-200 text-slate-700 px-5 py-3 rounded-2xl shadow-sm max-w-xs text-center font-semibold text-xs leading-relaxed transition-all">
+        {speechBubbleText}
+        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-r border-b border-purple-200 rotate-45"></div>
+      </div>
+      
+      {/* Nexy SVG Mascot */}
+      <svg className="w-40 h-40 transform group-hover:scale-105 transition-transform" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* Shadow */}
+        <ellipse cx="100" cy="180" rx="60" ry="10" fill="#E2E8F0" />
+        
+        {/* Antennas */}
+        <line x1="100" y1="50" x2="100" y2="25" stroke="#9333EA" strokeWidth="6" strokeLinecap="round" />
+        <circle cx="100" cy="20" r="10" fill="#F59E0B" className="animate-pulse" />
+        <line x1="85" y1="55" x2="65" y2="35" stroke="#9333EA" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="60" cy="30" r="6" fill="#A855F7" />
+        
+        {/* Cute Robot Body */}
+        <rect x="50" y="95" width="100" height="70" rx="24" fill="#A855F7" />
+        <rect x="62" y="107" width="76" height="46" rx="12" fill="#7E22CE" />
+        
+        {/* Waving Arm (Left) */}
+        <path d="M45 120 C25 110 20 80 30 70" stroke="#A855F7" strokeWidth="12" strokeLinecap="round" className="origin-center animate-[spin_3s_ease-in-out_infinite]" />
+        {/* Right Arm */}
+        <path d="M155 120 C175 130 180 140 170 150" stroke="#A855F7" strokeWidth="12" strokeLinecap="round" />
+        
+        {/* Legs */}
+        <rect x="75" y="160" width="16" height="20" rx="8" fill="#6B21A8" />
+        <rect x="109" y="160" width="16" height="20" rx="8" fill="#6B21A8" />
+        
+        {/* Mascot Face Head */}
+        <rect x="55" y="45" width="90" height="60" rx="20" fill="#9333EA" />
+        {/* Screen Eyes container */}
+        <rect x="65" y="53" width="70" height="36" rx="10" fill="#0F172A" />
+        {/* Happy Smiling Digital Eyes */}
+        <path d="M78 72 C78 65 88 65 88 72" stroke="#10B981" strokeWidth="4" strokeLinecap="round" />
+        <path d="M112 72 C112 65 122 65 122 72" stroke="#10B981" strokeWidth="4" strokeLinecap="round" />
+        
+        {/* Cute blush cheeks */}
+        <circle cx="72" cy="80" r="4" fill="#EF4444" opacity="0.6" />
+        <circle cx="128" cy="80" r="4" fill="#EF4444" opacity="0.6" />
+      </svg>
+    </div>
+  );
+}
+
+// --- HOME VIEW WITH MASCOT, PORTAL LOGIN, AND CAREER COMPASS ---
+function HomeView({ 
+  onNavigate, 
+  compassStep, 
+  setCompassStep, 
+  compassScores, 
+  setCompassScores, 
+  mascotBubble, 
+  onMascotClick,
+  candidateLoginInput,
+  setCandidateLoginInput,
+  onCandidateLogin,
+  loginFeedback,
+  activeCandidateEmail,
+  onLogout
+}) {
+  const [currentQ, setCurrentQ] = useState(0);
+
+  const startCompass = () => {
+    setCompassScores({});
+    setCurrentQ(0);
+    setCompassStep(1);
+  };
+
+  const handleAnswer = (roleId) => {
+    setCompassScores(prev => ({
+      ...prev,
+      [roleId]: (prev[roleId] || 0) + 1
+    }));
+
+    if (currentQ < COMPASS_QUESTIONS.length - 1) {
+      setCurrentQ(prev => prev + 1);
+    } else {
+      setCompassStep(5); // Show results
+    }
+  };
+
+  const getRecommendedJob = () => {
+    let topRoleId = "j2"; // Default
+    let topScore = -1;
+    Object.keys(compassScores).forEach(key => {
+      if (compassScores[key] > topScore) {
+        topScore = compassScores[key];
+        topRoleId = key;
+      }
+    });
+    return JOBS.find(j => j.id === topRoleId) || JOBS[0];
+  };
+
+  return (
+    <div className="space-y-16 py-4">
+      {/* Hero Grid */}
+      <div className="grid md:grid-cols-12 gap-12 items-center bg-white rounded-3xl p-8 md:p-12 border border-purple-100 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-purple-100/30 rounded-full blur-3xl -z-10"></div>
+        
+        <div className="md:col-span-7 space-y-6">
+          <div className="inline-flex items-center space-x-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-full font-semibold text-xs">
+            <Sparkles className="h-4 w-4 text-amber-500 animate-spin" />
+            <span>Inclusive Careers • Dual-Track Competency System</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+            Discover Your Potential with <span className="text-purple-600">NexusHR.</span>
+          </h1>
+          <p className="text-base md:text-lg text-slate-600 leading-relaxed">
+            Welcome to our career community! Experience a hiring ecosystem where your skills speak loudest. Explore careers in engineering, sourcing, strategy, benefits, and development.
+          </p>
+          <div className="flex flex-wrap gap-4 pt-2">
+            <button 
+              onClick={() => onNavigate('jobs')}
+              className="bg-purple-600 text-white px-6 py-3 rounded-xl font-bold text-base hover:bg-purple-700 transition-all shadow-md hover:shadow-purple-200 flex items-center"
+            >
+              <Search className="h-5 w-5 mr-2" />
+              Browse Careers
+            </button>
+            <a 
+              href="#career-compass"
+              className="bg-purple-50 text-purple-700 px-6 py-3 rounded-xl font-bold text-base hover:bg-purple-100 transition-all flex items-center border border-purple-100"
+            >
+              <Compass className="h-5 w-5 mr-2 animate-spin" />
+              Career Compass Quiz
+            </a>
+          </div>
+        </div>
+        
+        {/* Mascot Column */}
+        <div className="md:col-span-5 flex justify-center">
+          <NexyMascot speechBubbleText={mascotBubble} onClick={onMascotClick} />
+        </div>
+      </div>
+
+      {/* Helper Tips Box */}
+      <div className="bg-purple-50 rounded-2xl border border-purple-100 p-6 flex items-start space-x-4">
+        <div className="bg-purple-600 text-white p-2 rounded-xl">
+          <Sparkles className="w-5 h-5" />
+        </div>
+        <div>
+          <h4 className="text-sm font-bold text-purple-900">Sign In Quickly Above!</h4>
+          <p className="text-xs text-purple-700 leading-relaxed mt-1">
+            Now you don't have to scroll down to log in. Use the brand new <strong>Candidate Login Bar</strong> on the top right of the navigation header. Use the test address <strong className="bg-purple-100 px-1 rounded">sophia@example.com</strong> to view live pipeline reports and status timelines instantly!
+          </p>
+        </div>
+      </div>
+
+      {/* Upgraded 4-Question Compass Section */}
+      <div id="career-compass" className="bg-purple-900 text-white rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
+        <div className="relative max-w-3xl mx-auto space-y-8">
+          
+          {compassStep === 0 && (
+            <div className="text-center space-y-6 py-8">
+              <div className="inline-flex bg-purple-850 p-3 rounded-full text-purple-200 mx-auto">
+                <Compass className="h-10 w-10 text-purple-300 animate-spin" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-extrabold">Nexy's Interactive Career Compass</h2>
+              <p className="text-purple-200 text-lg max-w-xl mx-auto">
+                Spend 60 seconds answering 4 situational scenario questions. Our compass will guide you to your perfect corporate track!
+              </p>
+              <button 
+                onClick={startCompass}
+                className="bg-emerald-500 text-white font-extrabold px-8 py-3.5 rounded-xl hover:bg-emerald-600 transition-all shadow-lg text-lg inline-flex items-center"
+              >
+                Start Career Quiz
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </button>
+            </div>
+          )}
+
+          {compassStep >= 1 && compassStep <= 4 && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center border-b border-purple-800 pb-4">
+                <span className="text-sm font-semibold text-purple-300">Question {currentQ + 1} of {COMPASS_QUESTIONS.length}</span>
+                <span className="text-xs bg-purple-800 text-purple-200 px-3 py-1 rounded-full font-bold">Situational Judgement</span>
+              </div>
+              
+              <h3 className="text-xl md:text-2xl font-bold leading-snug">{COMPASS_QUESTIONS[currentQ].text}</h3>
+
+              <div className="grid gap-3">
+                {COMPASS_QUESTIONS[currentQ].options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleAnswer(opt.roleId)}
+                    className="w-full text-left bg-purple-800/40 hover:bg-purple-700/80 border border-purple-700/50 p-4 rounded-xl text-sm md:text-base font-medium transition-all hover:scale-[1.01]"
+                  >
+                    {opt.text}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {compassStep === 5 && (
+            <div className="bg-white text-slate-900 rounded-2xl p-6 md:p-8 space-y-6 shadow-2xl animate-[fade-in_0.5s_ease-out]">
+              <div className="flex items-center space-x-3 text-emerald-600">
+                <CheckCircle2 className="h-8 w-8" />
+                <h3 className="text-2xl font-bold">Compass Results Ready!</h3>
+              </div>
+              
+              {(() => {
+                const recJob = getRecommendedJob();
+                return (
+                  <div className="space-y-4">
+                    <p className="text-slate-600 text-base">
+                      Based on your preferences and scenario solutions, Nexy highly recommends:
+                    </p>
+                    <div className="bg-purple-50 border border-purple-100 p-5 rounded-xl">
+                      <div className="flex justify-between items-start gap-4">
+                        <div>
+                          <span className="bg-purple-100 text-purple-800 px-2.5 py-1 rounded text-xs font-bold mb-2 inline-block">
+                            {recJob.department}
+                          </span>
+                          <h4 className="text-xl font-bold text-slate-900">{recJob.title}</h4>
+                        </div>
+                        <span className="text-xs text-slate-500 font-bold">{recJob.location}</span>
+                      </div>
+                      <p className="text-slate-600 text-sm mt-3 leading-relaxed">{recJob.description}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-3 pt-2">
+                      <button 
+                        onClick={() => onNavigate('apply', recJob)}
+                        className="bg-purple-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center text-sm"
+                      >
+                        Apply For This Role
+                        <ChevronRight className="h-4 w-4 ml-1.5" />
+                      </button>
+                      <button 
+                        onClick={startCompass}
+                        className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-3 rounded-lg transition-colors flex items-center text-sm border border-slate-200"
+                      >
+                        <RotateCcw className="h-4 w-4 mr-1.5" />
+                        Retake Quiz
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      {/* Inclusive HR Director Explanation */}
+      <div className="bg-white rounded-2xl border border-purple-100 p-8 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white text-3xl font-bold shrink-0 shadow-md">
+            AM
+          </div>
+          <div className="space-y-4">
+            <div className="inline-flex items-center space-x-1.5 bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">
+              <ShieldCheck className="h-3.5 w-3.5 text-purple-600" />
+              <span>A Note from our Inclusive People Director</span>
+            </div>
+            <h3 className="text-2xl font-black text-slate-900">"Our AI does not decide your future. Your skills do."</h3>
+            <p className="text-slate-600 leading-relaxed text-sm">
+              Hi, I'm Alisha Moore, HR Director here at Nexus. Historically, traditional resume reviews often relied on pedigree, school names, or social networks—factors that introduce bias. Our <strong>AI-Driven Candidate Screener</strong> is built to combat this. 
+            </p>
+            <p className="text-slate-600 text-xs leading-relaxed">
+              We calibrate our system dynamic checks based on track selections: the <strong>Internship Track</strong> bypasses complex past experiences, assessing core capabilities like curiosity, presentation, or teamwork. The <strong>Full-time Track</strong> calibrates for analytical, data systems, and strategic management experience.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4 pt-2 text-xs text-slate-700">
+              <div className="bg-purple-50/50 p-3 rounded-lg border border-purple-100/50">
+                <span className="font-bold text-purple-700 block mb-1">Blinded Evaluation</span>
+                Identities, age, and backgrounds are hidden. The system only reads competencies.
+              </div>
+              <div className="bg-purple-50/50 p-3 rounded-lg border border-purple-100/50">
+                <span className="font-bold text-purple-700 block mb-1">Dual-Track Tuning</span>
+                Expectations automatically shift whether you apply as an intern or a full-time professional.
+              </div>
+              <div className="bg-purple-50/50 p-3 rounded-lg border border-purple-100/50">
+                <span className="font-bold text-purple-700 block mb-1">Inclusive Framework</span>
+                We evaluate transferable skills, meaning untraditional backgrounds get a fair shot.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- JOBS VIEW ---
+function JobsView({ onNavigate }) {
+  return (
+    <div className="space-y-8 max-w-5xl mx-auto py-4">
+      <div>
+        <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Explore Open Careers</h1>
+        <p className="text-slate-600">Select any role to view prerequisites and submit your secure application.</p>
+      </div>
+
+      <div className="grid gap-6">
+        {JOBS.map(job => (
+          <div key={job.id} className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center space-x-3">
+                  <h2 className="text-xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">{job.title}</h2>
+                  <span className="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">{job.department}</span>
+                </div>
+                <span className="text-xs font-semibold text-slate-400">{job.location}</span>
+              </div>
+              <p className="text-slate-600 text-sm leading-relaxed">{job.description}</p>
+              
+              {/* Basic Requirements Block */}
+              <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center">
+                  <Sparkles className="h-3 w-3 text-amber-500 mr-1 animate-pulse" />
+                  Core Skills &amp; Basic Requirements:
+                </h4>
+                <p className="text-xs text-slate-700 leading-relaxed mb-3">{job.basicRequirements}</p>
+                <div className="flex flex-wrap gap-1.5 items-center text-xs">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase mr-1">Full-time requirements:</span>
+                  {job.keywords.slice(0, 4).map((kw) => (
+                    <span key={kw} className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded text-[11px] font-medium border border-purple-100">{kw}</span>
+                  ))}
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1.5 items-center text-xs">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase mr-1">Intern expectations:</span>
+                  {job.internKeywords.slice(0, 4).map((kw) => (
+                    <span key={kw} className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-[11px] font-medium border border-emerald-100">{kw}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-6 flex justify-end">
+              <button 
+                onClick={() => onNavigate('apply', job)}
+                className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-purple-700 transition-colors flex items-center shadow-sm"
+              >
+                Apply for Role
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// --- APPLY VIEW (Expanded with upload files and website link fields) ---
+function ApplyView({ job, onNavigate, applications, setApplications, activeCandidateEmail, setActiveCandidateEmail }) {
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: activeCandidateEmail || '', 
+    resumeText: '',
+    portfolioUrl: '',
+    githubUrl: '',
+    fileName: ''
+  });
+  const [roleType, setRoleType] = useState('Full-time'); 
+  const [status, setStatus] = useState('idle'); // idle, screening, complete
+  const [screeningPhase, setScreeningPhase] = useState('');
+
+  if (!job) return <div>No job selected.</div>;
+
+  const handleApply = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.resumeText) return;
+    
+    setStatus('screening');
+    runAISimulation();
+  };
+
+  const runAISimulation = () => {
+    const phases = [
+      `Initializing ${roleType} calibration criteria...`,
+      "Evaluating resume keywords and text structures...",
+      "Analyzing core transferable skills...",
+      "Scanning portfolio and external reference links...",
+      "Calculating semantic match profile...",
+      "Generating final match feedback..."
+    ];
+    
+    let step = 0;
+    const interval = setInterval(() => {
+      setScreeningPhase(phases[step]);
+      step++;
+      
+      if (step >= phases.length) {
+        clearInterval(interval);
+        finalizeApplication();
+      }
+    }, 700);
+  };
+
+  const finalizeApplication = () => {
+    const resumeLower = formData.resumeText.toLowerCase();
+    const selectedKeywords = roleType === 'Internship' ? job.internKeywords : job.keywords;
+    const matchedSkills = selectedKeywords.filter(kw => resumeLower.includes(kw));
+    
+    let baseScore = (matchedSkills.length / selectedKeywords.length) * 100;
+    let scoreVariance = Math.floor(Math.random() * 15);
+    let finalScore = Math.min(100, Math.max(15, Math.round(baseScore + scoreVariance)));
+
+    let aiSummary = "";
+    if (roleType === 'Internship') {
+      if (finalScore >= 75) {
+        aiSummary = `Excellent Intern match! Shows immense curiosity, motivation, and foundational skills in ${matchedSkills.slice(0, 3).join(', ') || 'relevant fields'}. Strong candidate for learning program.`;
+      } else {
+        aiSummary = `Moderate Intern match. Demonstrates general interest but needs further training/alignment in basic requirements like ${selectedKeywords.slice(0, 2).join(', ')}.`;
+      }
+    } else {
+      if (finalScore >= 80) {
+        aiSummary = `Strong Full-Time match. Candidate's resume shows high relevance to requirements, specifically matching core skills: ${matchedSkills.slice(0, 3).join(', ')}. Recommended for immediate screen.`;
+      } else if (finalScore >= 50) {
+        aiSummary = `Moderate Full-Time match. Candidate has core foundations but could be missing comprehensive strategic execution skills.`;
+      } else {
+        aiSummary = `Low Full-Time match. The background lacks key strategic execution indicators required for this role.`;
+      }
+    }
+
+    const newApp = {
+      id: `a${Date.now()}`,
+      jobId: job.id,
+      name: formData.name,
+      email: formData.email.trim().toLowerCase(),
+      type: roleType,
+      fileName: formData.fileName || 'Uploaded_Resume.pdf',
+      portfolioUrl: formData.portfolioUrl || formData.githubUrl || '',
+      aiScore: finalScore,
+      recruiterScore: finalScore, 
+      recruiterFeedback: '',
+      aiSummary: aiSummary,
+      status: 'AI Calibrated',
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    setApplications([...applications, newApp]);
+    setActiveCandidateEmail(formData.email.trim().toLowerCase());
+    setStatus('complete');
+  };
+
+  const triggerFileMock = () => {
+    setFormData(prev => ({ ...prev, fileName: 'Resume_Nexus_Submission.pdf' }));
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-8 py-4">
+      <div>
+        <button 
+          onClick={() => onNavigate('jobs')}
+          className="text-sm font-semibold text-slate-500 hover:text-slate-900 mb-6 flex items-center transition-colors"
+        >
+          ← Back to Roles
+        </button>
+        <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Apply for {job.title}</h1>
+        <p className="text-slate-600">{job.location} • {job.department}</p>
+      </div>
+
+      <div className="bg-white rounded-2xl p-6 md:p-8 border border-purple-100 shadow-sm relative overflow-hidden">
+        
+        {/* Screening Overlay */}
+        {status === 'screening' && (
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center space-y-6">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full border-4 border-slate-200"></div>
+              <div className="w-24 h-24 rounded-full border-4 border-purple-600 border-t-transparent animate-spin absolute top-0 left-0"></div>
+              <Bot className="h-10 w-10 text-purple-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-bounce" />
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-bold text-slate-900">Custom Track Calibration</h3>
+              <p className="text-purple-600 font-bold text-sm">Calibrating for: {roleType} Track</p>
+              <p className="text-slate-600 min-h-[1.5rem] transition-all text-sm px-4">{screeningPhase}</p>
+            </div>
+            <div className="w-64 h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div className="h-full bg-purple-600 animate-[pulse_2s_ease-in-out_infinite] w-full"></div>
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={handleApply} className="space-y-6">
+          {/* Track Difficulty Selector */}
+          <div className="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-3">
+            <label className="text-sm font-bold text-purple-900 block">Choose Your Desired Track</label>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => setRoleType('Full-time')}
+                className={`py-3 px-4 rounded-xl border-2 font-bold flex flex-col items-center justify-center transition-all ${roleType === 'Full-time' ? 'border-blue-600 bg-purple-100/30 text-purple-900' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'}`}
+              >
+                <Briefcase className="h-5 w-5 mb-1" />
+                <span className="text-sm">Full-time Track</span>
+                <span className="text-[10px] text-slate-500 font-normal">Assesses execution experience</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRoleType('Internship')}
+                className={`py-3 px-4 rounded-xl border-2 font-bold flex flex-col items-center justify-center transition-all ${roleType === 'Internship' ? 'border-purple-600 bg-purple-100/30 text-purple-900' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'}`}
+              >
+                <GraduationCap className="h-5 w-5 mb-1" />
+                <span className="text-sm">Internship Track</span>
+                <span className="text-[10px] text-slate-500 font-normal">Adaptive, potential-focused</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Contact Information */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-900">Full Name</label>
+              <input 
+                type="text" 
+                required
+                value={formData.name}
+                onChange={e => setFormData({...formData, name: e.target.value})}
+                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 outline-none text-sm"
+                placeholder="Jane Doe"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-900">Email Address</label>
+              <input 
+                type="email" 
+                required
+                value={formData.email}
+                onChange={e => setFormData({...formData, email: e.target.value})}
+                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 outline-none text-sm"
+                placeholder="jane@example.com"
+              />
+            </div>
+          </div>
+
+          {/* External Links Input */}
+          <div className="grid md:grid-cols-2 gap-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="space-y-2 col-span-2">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                <Link2 className="w-3.5 h-3.5" /> Reference &amp; Portfolio Links (Optional)
+              </span>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700">LinkedIn/Website URL</label>
+              <input 
+                type="url" 
+                value={formData.portfolioUrl}
+                onChange={e => setFormData({...formData, portfolioUrl: e.target.value})}
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-purple-600 focus:border-purple-600 outline-none text-xs bg-white"
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700">GitHub/Work URL</label>
+              <input 
+                type="url" 
+                value={formData.githubUrl}
+                onChange={e => setFormData({...formData, githubUrl: e.target.value})}
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-1 focus:ring-purple-600 focus:border-purple-600 outline-none text-xs bg-white"
+                placeholder="https://github.com/username"
+              />
+            </div>
+          </div>
+
+          {/* File Upload simulator */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-900 block">Upload Document Resume</label>
+            <div 
+              onClick={triggerFileMock}
+              className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${formData.fileName ? 'border-emerald-500 bg-emerald-50/20' : 'border-purple-300 bg-purple-50/10 hover:border-purple-400'}`}
+            >
+              {formData.fileName ? (
+                <div className="flex flex-col items-center space-y-2 text-emerald-700">
+                  <FileCode className="w-8 h-8" />
+                  <span className="text-xs font-bold">{formData.fileName}</span>
+                  <span className="text-[10px] text-slate-400">File attached successfully. Click again to replace.</span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center space-y-2 text-slate-500">
+                  <Upload className="w-8 h-8 text-purple-500" />
+                  <span className="text-xs font-semibold">Drag &amp; drop or click to simulate file attachment</span>
+                  <span className="text-[10px] text-slate-400">Accepts .PDF, .DOCX, or .TXT up to 10MB</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Core Resume text evaluation input */}
+          <div className="space-y-2">
+             <div className="flex justify-between items-center">
+               <label className="text-sm font-semibold text-slate-900">Resume / Work History Text</label>
+               <span className="text-xs font-bold bg-purple-50 text-purple-700 px-2 py-1 rounded flex items-center border border-purple-100">
+                 <BrainCircuit className="w-3 h-3 mr-1 text-purple-600" /> Dual-Track AI Evaluator
+               </span>
+             </div>
+             <p className="text-xs text-slate-500 mb-2">Paste the text of your experiences, education, and credentials below to trigger AI scoring.</p>
+             <textarea 
+               required
+               value={formData.resumeText}
+               onChange={e => setFormData({...formData, resumeText: e.target.value})}
+               className="w-full h-40 border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 outline-none text-sm resize-none"
+               placeholder={roleType === 'Internship' ? "Tell us about your school courses, personal projects, and things you love to learn..." : "Describe your professional tenure, tools managed, and strategic outcomes achieved..."}
+             />
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 flex items-start space-x-3">
+            <AlertCircle className="h-5 w-5 text-slate-400 shrink-0 mt-0.5" />
+            <p className="text-xs text-slate-600 leading-relaxed">
+              By submitting this application, you consent to having your provided information processed by the NexusHR Automated Employment Decision Tool (AEDT) to evaluate your fit for the role.
+            </p>
+          </div>
+
+          <button 
+            type="submit"
+            className="w-full bg-purple-600 text-white font-bold py-3.5 rounded-xl hover:bg-purple-700 transition-colors shadow-lg shadow-purple-600/20 flex justify-center items-center"
+          >
+            <Bot className="h-5 w-5 mr-2" />
+            Submit &amp; Run AI Screen ({roleType})
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// --- UPGRADED CANDIDATE FEEDBACK INBOX VIEW (Account Portal / Tracker) ---
+function CandidateInboxView({ 
+  activeCandidateEmail, 
+  candidateLoginInput, 
+  setCandidateLoginInput, 
+  onLogin, 
+  loginFeedback, 
+  applications, 
+  jobs, 
+  onLogout,
+  onNavigate
+}) {
+  const getJobTitle = (id) => jobs.find(j => j.id === id)?.title || 'Unknown Role';
+
+  // Find all applications matching the active session email
+  const candidateApps = applications.filter(
+    app => app.email.toLowerCase().trim() === activeCandidateEmail.toLowerCase().trim()
+  );
+
+  return (
+    <div className="max-w-4xl mx-auto py-6 space-y-8 animate-[fade-in_0.5s_ease-out]">
+      <div className="text-center space-y-3">
+        <div className="inline-flex bg-purple-50 border border-purple-100 text-purple-700 p-3 rounded-2xl">
+          <Inbox className="w-8 h-8" />
+        </div>
+        <h1 className="text-3xl font-extrabold text-slate-900">Your Personal Candidate Hub</h1>
+        <p className="text-slate-600 max-w-lg mx-auto text-sm">
+          A secure space to review dynamic status updates, skills calibration feedback, and adjusted scores from our recruiting team.
+        </p>
+      </div>
+
+      {!activeCandidateEmail ? (
+        /* Login Required UI */
+        <div className="bg-white p-8 rounded-2xl border border-purple-100 shadow-sm max-w-lg mx-auto text-center space-y-6">
+          <div className="mx-auto w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+            <Lock className="w-6 h-6" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-bold">Sign In to Track Applications</h3>
+            <p className="text-xs text-slate-500">
+              Please enter the email address you used in your application to track your review progress.
+            </p>
+          </div>
+          <form onSubmit={onLogin} className="space-y-4 text-left">
+            <div>
+              <label className="block text-xs font-bold text-slate-600 mb-1">Registered Email Address</label>
+              <input 
+                type="email" 
+                required
+                value={candidateLoginInput}
+                onChange={(e) => setCandidateLoginInput(e.target.value)}
+                placeholder="e.g. sophia@example.com"
+                className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600 focus:border-purple-600 outline-none text-sm py-2.5"
+              />
+            </div>
+            {loginFeedback && (
+              <div className="text-xs text-amber-600 bg-amber-50 p-2.5 rounded border border-amber-100 flex items-center gap-1">
+                <AlertCircle className="w-4 h-4" /> {loginFeedback}
+              </div>
+            )}
+            <button 
+              type="submit"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors"
+            >
+              Access Portal
+            </button>
+          </form>
+          <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-left">
+            <p className="text-[11px] text-slate-500">
+              💡 For testing: You can type <strong className="text-purple-700">sophia@example.com</strong> to see a simulated pre-existing internship applicant!
+            </p>
+          </div>
+        </div>
+      ) : (
+        /* Authenticated Session UI */
+        <div className="space-y-8">
+          <div className="bg-purple-900 text-white p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="space-y-1">
+              <span className="text-xs text-purple-300 uppercase tracking-widest font-bold">Active Account Portal</span>
+              <h3 className="text-xl font-bold">{activeCandidateEmail}</h3>
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => onNavigate('jobs')}
+                className="bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+              >
+                Apply for New Role
+              </button>
+              <button 
+                onClick={onLogout}
+                className="bg-purple-800 hover:bg-purple-700 text-purple-200 text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h3 className="text-lg font-bold text-slate-800">Your Active Applications ({candidateApps.length})</h3>
+            
+            {candidateApps.map((app) => {
+              // Stepper index based on pipeline status
+              const statuses = ["AI Calibrated", "Shortlisted", "Interview Scheduled"];
+              let activeStep = statuses.indexOf(app.status);
+              if (activeStep === -1) activeStep = 0; // fallback
+
+              return (
+                <div key={app.id} className="bg-white border border-purple-100 rounded-2xl p-6 shadow-sm space-y-8 animate-[fade-in_0.3s_ease-out]">
+                  
+                  {/* Top application meta & scores */}
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                      <span className="text-[10px] font-extrabold uppercase bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-100">
+                        {app.type} Track
+                      </span>
+                      <h4 className="text-xl font-bold text-slate-900 mt-1">{getJobTitle(app.jobId)}</h4>
+                      <p className="text-xs text-slate-400">Application Reference ID: {app.id} • Dated {app.date}</p>
+                    </div>
+                    
+                    {/* Visual Score display */}
+                    <div className="flex items-center gap-3 bg-purple-50/50 p-3 rounded-xl border border-purple-100">
+                      <div className="text-center px-1">
+                        <span className="text-[9px] font-bold text-slate-400 uppercase block">AI Analysis</span>
+                        <span className="text-xs font-bold text-slate-500">{app.aiScore}%</span>
+                      </div>
+                      <div className="w-px h-8 bg-purple-200"></div>
+                      <div className="text-center px-1">
+                        <span className="text-[9px] font-bold text-purple-700 uppercase block">Hiring Manager</span>
+                        <span className="text-base font-extrabold text-purple-900">{app.recruiterScore}%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* VISUAL STATUS TRACKER STEPPER */}
+                  <div className="space-y-4">
+                    <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Application Progress Tracker</h5>
+                    <div className="grid grid-cols-4 items-center">
+                      
+                      {/* Step 1 */}
+                      <div className="flex flex-col items-center relative">
+                        <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">
+                          <Check className="w-4 h-4" />
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-800 mt-2 text-center">Applied</span>
+                        <div className="absolute top-4 left-[calc(50%+16px)] right-0 h-1 bg-purple-600 w-full -z-10 hidden sm:block"></div>
+                      </div>
+
+                      {/* Step 2 */}
+                      <div className="flex flex-col items-center relative">
+                        <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">
+                          <Check className="w-4 h-4" />
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-800 mt-2 text-center">AI Calibrated</span>
+                        <div className={`absolute top-4 left-[calc(50%+16px)] right-0 h-1 w-full -z-10 hidden sm:block ${activeStep >= 1 ? 'bg-purple-600' : 'bg-slate-200'}`}></div>
+                      </div>
+
+                      {/* Step 3 */}
+                      <div className="flex flex-col items-center relative">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${activeStep >= 1 ? 'bg-purple-600 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                          {activeStep >= 1 ? <Check className="w-4 h-4" /> : "3"}
+                        </div>
+                        <span className={`text-[11px] font-bold mt-2 text-center ${activeStep >= 1 ? 'text-slate-800' : 'text-slate-400'}`}>HR Reviewed</span>
+                        <div className={`absolute top-4 left-[calc(50%+16px)] right-0 h-1 w-full -z-10 hidden sm:block ${activeStep >= 2 ? 'bg-purple-600' : 'bg-slate-200'}`}></div>
+                      </div>
+
+                      {/* Step 4 */}
+                      <div className="flex flex-col items-center relative">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${activeStep >= 2 ? 'bg-purple-600 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                          {activeStep >= 2 ? <Check className="w-4 h-4" /> : "4"}
+                        </div>
+                        <span className={`text-[11px] font-bold mt-2 text-center ${activeStep >= 2 ? 'text-slate-800' : 'text-slate-400'}`}>Interview Phase</span>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Feedback Blocks */}
+                  <div className="grid md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+                    <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-100 relative">
+                      <BrainCircuit className="absolute top-4 right-4 h-5 w-5 text-purple-200" />
+                      <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">AI Screen Summary</h5>
+                      <p className="text-xs text-slate-600 leading-relaxed">{app.aiSummary}</p>
+                    </div>
+
+                    <div className="space-y-2 bg-purple-50/40 p-4 rounded-xl border border-purple-100/50 relative">
+                      <MessageSquare className="absolute top-4 right-4 h-5 w-5 text-purple-400 animate-pulse" />
+                      <h5 className="text-xs font-bold text-purple-700 uppercase tracking-wider">Recruiter Feedback &amp; Mentorship Notes</h5>
+                      {app.recruiterFeedback ? (
+                        <p className="text-xs text-slate-700 leading-relaxed font-semibold">
+                          "{app.recruiterFeedback}"
+                        </p>
+                      ) : (
+                        <div className="space-y-2">
+                          <p className="text-xs text-slate-500 italic leading-relaxed">
+                            "We are currently reviewing your calibrated criteria against our upcoming interview slots. We will publish your mentoring notes right here shortly!"
+                          </p>
+                          <div className="flex items-center space-x-1.5 text-[10px] text-slate-400">
+                            <Clock className="w-3 h-3 text-amber-500 animate-spin" />
+                            <span>Status: Human-in-the-Loop Assessment</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+              );
+            })}
+
+            {candidateApps.length === 0 && (
+              <div className="text-center p-12 bg-white rounded-2xl border border-slate-200 space-y-4">
+                <FileText className="h-12 w-12 mx-auto text-slate-300" />
+                <p className="text-slate-500 text-sm">You haven't submitted any applications under this email yet.</p>
+                <button 
+                  onClick={() => onNavigate('jobs')}
+                  className="bg-purple-600 text-white font-bold px-5 py-2 rounded-lg text-xs"
+                >
+                  Apply For Your First Role
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- RECRUITER PORTAL DASHBOARD VIEW ---
+function DashboardView({ applications, jobs, onUpdate }) {
+  const getJobTitle = (id) => jobs.find(j => j.id === id)?.title || 'Unknown Role';
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return 'text-green-600 bg-green-50 border-green-200';
+    if (score >= 50) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+    return 'text-red-600 bg-red-50 border-red-200';
+  };
+
+  return (
+    <div className="space-y-6 animate-[fade-in_0.4s_ease-out]">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-purple-100 pb-6 mb-6">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900">Recruiter Command Center</h1>
+          <p className="text-slate-600 mt-1">Review skills metrics &amp; adjust candidate mentoring feedback</p>
+        </div>
+        <div className="mt-4 md:mt-0 flex items-center space-x-2 bg-white border border-purple-100 rounded-lg p-2 shadow-sm">
+          <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+          <span className="text-sm font-bold text-slate-700">AI Model Online (Version 2.5)</span>
+        </div>
+      </div>
+
+      {/* Metric Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Applications</p>
+          <p className="text-4xl font-extrabold text-slate-900 mt-2">{applications.length}</p>
+        </div>
+        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Top Matches ({'>'}75%)</p>
+          <p className="text-4xl font-bold text-purple-600 mt-2">
+            {applications.filter(a => a.aiScore >= 75).length}
+          </p>
+        </div>
+        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Overrides Active</p>
+          <p className="text-4xl font-bold text-emerald-600 mt-2">
+            {applications.filter(a => a.recruiterScore !== a.aiScore).length}
+          </p>
+        </div>
+      </div>
+
+      {/* Live Pipeline Listings */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="px-6 py-4 border-b border-purple-100 bg-purple-50/50 flex justify-between items-center">
+          <h2 className="text-lg font-bold text-purple-950">Active Applicant Pipelines</h2>
+          <span className="text-xs bg-purple-100 text-purple-800 font-bold px-2.5 py-1 rounded-full">Recruiter Override Enabled</span>
+        </div>
+        
+        <div className="divide-y divide-slate-100">
+          {[...applications].sort((a, b) => b.recruiterScore - a.recruiterScore).map((app) => (
+            <div key={app.id} className="p-6 hover:bg-slate-50 transition-all flex flex-col xl:flex-row gap-6">
+              
+              {/* Candidate Bio Block */}
+              <div className="flex-1 space-y-2">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h3 className="text-lg font-bold text-slate-900">{app.name}</h3>
+                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded ${app.type === 'Internship' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
+                    {app.type} Track
+                  </span>
+                  
+                  {/* Status Picker Selector */}
+                  <select 
+                    value={app.status} 
+                    onChange={(e) => onUpdate(app.id, 'status', e.target.value)}
+                    className="text-xs font-semibold bg-slate-100 border border-slate-300 rounded px-2.5 py-0.5 text-slate-600 outline-none focus:ring-1 focus:ring-purple-600"
+                  >
+                    <option value="AI Calibrated">AI Calibrated</option>
+                    <option value="Shortlisted">Shortlisted</option>
+                    <option value="Interview Scheduled">Interview Scheduled</option>
+                  </select>
+                </div>
+
+                <p className="text-sm text-slate-500 flex items-center">
+                  <Briefcase className="w-4 h-4 mr-1.5 text-slate-400" /> 
+                  Applied for: <span className="font-semibold text-slate-700 ml-1">{getJobTitle(app.jobId)}</span>
+                </p>
+                <p className="text-xs text-slate-500">{app.email} • Recieved {app.date}</p>
+                
+                {app.portfolioUrl && (
+                  <p className="text-xs text-purple-600 flex items-center gap-1">
+                    <Link2 className="w-3.5 h-3.5" /> <a href={app.portfolioUrl} target="_blank" rel="noopener noreferrer" className="hover:underline truncate max-w-xs">{app.portfolioUrl}</a>
+                  </p>
+                )}
+
+                {/* Overwrite slider bar */}
+                <div className="pt-3 bg-slate-50/50 p-3 rounded-lg border border-slate-150 space-y-1 max-w-sm">
+                  <div className="flex justify-between items-center text-xs font-semibold text-slate-700">
+                    <span className="flex items-center gap-1"><UserCheck className="w-3.5 h-3.5 text-purple-600" /> Human Override Score:</span>
+                    <span className="text-purple-700 text-sm font-bold">{app.recruiterScore}%</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value={app.recruiterScore} 
+                    onChange={(e) => onUpdate(app.id, 'recruiterScore', parseInt(e.target.value))}
+                    className="w-full accent-purple-600 cursor-pointer h-1 bg-slate-200 rounded-lg appearance-none"
+                  />
+                  <p className="text-[10px] text-slate-400">Tweak evaluation scores to reflect additional transferable skills.</p>
+                </div>
+              </div>
+
+              {/* Match Scoring Badges */}
+              <div className="shrink-0 flex gap-4">
+                <div className="flex flex-col items-center justify-center w-20 h-20 rounded-xl border border-slate-100 shadow-sm bg-white">
+                   <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">AI Match</span>
+                   <span className="text-lg font-bold text-slate-500">
+                     {app.aiScore}%
+                   </span>
+                </div>
+                <div className="flex flex-col items-center justify-center w-24 h-24 rounded-2xl border border-purple-200 shadow-md bg-white">
+                   <span className="text-[10px] font-bold text-purple-600 uppercase tracking-wider mb-1">Recruiter</span>
+                   <span className={`text-2xl font-black ${getScoreColor(app.recruiterScore).split(' ')[0]}`}>
+                     {app.recruiterScore}%
+                   </span>
+                </div>
+              </div>
+
+              {/* AI auto assessments & Interactive Form Notes */}
+              <div className="flex-1 md:max-w-md space-y-4">
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 relative">
+                  <BrainCircuit className="absolute top-4 right-4 h-5 w-5 text-slate-300" />
+                  <h4 className="text-xs font-bold text-slate-500 uppercase mb-2">
+                    AI Auto-Analysis
+                  </h4>
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    {app.aiSummary}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-purple-700 uppercase flex items-center gap-1">
+                    <MessageSquare className="w-3.5 h-3.5" /> Direct Mentor Feedback (Visible in Candidate Inbox):
+                  </label>
+                  <textarea
+                    className="w-full p-2 text-xs border border-purple-100 rounded-lg focus:ring-1 focus:ring-purple-500 outline-none resize-none h-16 bg-white"
+                    placeholder="Provide constructive, encouraging feedback or interview preparation advice..."
+                    value={app.recruiterFeedback || ''}
+                    onChange={(e) => onUpdate(app.id, 'recruiterFeedback', e.target.value)}
+                  />
+                </div>
+              </div>
+
+            </div>
+          ))}
+          
+          {applications.length === 0 && (
+             <div className="p-12 text-center text-slate-500">
+               <FileText className="h-12 w-12 mx-auto text-slate-300 mb-4" />
+               <p>No applications received yet.</p>
+             </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
